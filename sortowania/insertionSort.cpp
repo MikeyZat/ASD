@@ -11,7 +11,7 @@ void printList(node *first) {
         cout << first->value << " ";
         first = first->next;
     }
-    cout<<endl;
+    cout << endl;
 }
 
 node *createList() {
@@ -29,28 +29,28 @@ node *createList() {
     return firstC;
 }
 
-void insert(node *&sorted, node *notSorted) {
-    if(sorted->value> notSorted->value){
+void insert(node *&sorted, node *notSorted) {           //przez referencję bo może się zmienić początek listy
+    if (sorted->value > notSorted->value) {             //wstawianie na początek listy
         notSorted->next = sorted;
-        sorted=notSorted;
+        sorted = notSorted;
         return;
     }
-    node* sortedCopy = sorted;
-    while (sortedCopy->next != nullptr && sortedCopy->next->value < notSorted->value) {
+    node *sortedCopy = sorted;
+    while (sortedCopy->next != nullptr && sortedCopy->next->value < notSorted->value) {             //szukamy miejsca w które wstawić
         sortedCopy = sortedCopy->next;
     }
     notSorted->next = sortedCopy->next;
-    sortedCopy->next = notSorted;
+    sortedCopy->next = notSorted;                                   //wstawianko
 }
 
 node *insertionSort(node *first) {
-    if (first == nullptr) return nullptr;
+    if (first == nullptr) return nullptr;                           //jak dostaniemy pustą listę to zwracamy null
     node *sorted = first;
-    node *notSorted = first->next;
+    node *notSorted = first->next;                                  //rozdzielamy na 2 listy posortowaną i nie posortowaną
     sorted->next = nullptr;
-    while (notSorted != nullptr) {
-        node* tmp = notSorted;
-        notSorted = notSorted->next;
+    while (notSorted != nullptr) {                                  //sortujemy dopoki istnieje lista nieposortowana
+        node *tmp = notSorted;
+        notSorted = notSorted->next;                               //tmp żeby 'nie zgubić' nieposortowanej listy
         insert(sorted, tmp);
     }
     return sorted;
@@ -58,9 +58,9 @@ node *insertionSort(node *first) {
 
 
 int main() {
-    node* first = createList();
+    node *first = createList();
     printList(first);
-    node* sorted = insertionSort(first);
+    node *sorted = insertionSort(first);
     printList(sorted);
     return 0;
 }
