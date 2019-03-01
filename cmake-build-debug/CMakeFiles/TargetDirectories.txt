@@ -1,3 +1,0 @@
-C:/Users/mikey/CLionProjects/ASD/cmake-build-debug/CMakeFiles/ASD.dir
-C:/Users/mikey/CLionProjects/ASD/cmake-build-debug/CMakeFiles/edit_cache.dir
-C:/Users/mikey/CLionProjects/ASD/cmake-build-debug/CMakeFiles/rebuild_cache.dir
