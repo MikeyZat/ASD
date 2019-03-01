@@ -3,4 +3,4 @@ project(ASD)
 
 set(CMAKE_CXX_STANDARD 14)
 
-add_executable(ASD insertionSort.cpp)
+add_executable(ASD sortowania/insertionSort.cpp)
