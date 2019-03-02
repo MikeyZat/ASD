@@ -36,7 +36,8 @@ void insert(node *&sorted, node *notSorted) {           //przez referencję bo m
         return;
     }
     node *sortedCopy = sorted;
-    while (sortedCopy->next != nullptr && sortedCopy->next->value < notSorted->value) {             //szukamy miejsca w które wstawić
+    while (sortedCopy->next != nullptr &&
+           sortedCopy->next->value < notSorted->value) {             //szukamy miejsca w które wstawić
         sortedCopy = sortedCopy->next;
     }
     notSorted->next = sortedCopy->next;
@@ -56,11 +57,28 @@ node *insertionSort(node *first) {
     return sorted;
 }
 
+void selectSort(int N, int tab[]) {
+    for (int i = 0; i < N - 1; i++) {
+        int min = i;
+        for (int j = i + 1; j < N; j++) {
+            if (tab[j] < tab[min])
+                min = j;
+        }
+        int tmp = tab[i];
+        tab[i] = tab[min];
+        tab[min] = tmp;
+    }
+}
+
 
 int main() {
-    node *first = createList();
-    printList(first);
-    node *sorted = insertionSort(first);
-    printList(sorted);
+    int t[10];
+    for (int i = 0; i < 10; i++) {
+        cin>>t[i];
+    }
+    selectSort(10,t);
+    for (int i = 0; i < 10; i++) {
+        cout<<t[i]<<" ";
+    }
     return 0;
 }
