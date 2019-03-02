@@ -70,15 +70,29 @@ void selectSort(int N, int tab[]) {
     }
 }
 
+void bubbleSort(int N, int tab[]) {
+    for (int i = 0; i < N; i++) {
+        bool zamiana = false;
+        for (int j = 0; j < N - 1; j++) {
+            if (tab[j] > tab[j + 1]) {
+                int tmp = tab[j];
+                tab[j] = tab[j + 1];
+                tab[j + 1] = tmp;
+                zamiana = true;
+            }
+        }
+        if(!zamiana) return;
+    }
+}
 
 int main() {
     int t[10];
     for (int i = 0; i < 10; i++) {
-        cin>>t[i];
+        cin >> t[i];
     }
-    selectSort(10,t);
+    bubbleSort(10, t);
     for (int i = 0; i < 10; i++) {
-        cout<<t[i]<<" ";
+        cout << t[i] << " ";
     }
     return 0;
 }

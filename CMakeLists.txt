@@ -4,3 +4,4 @@ project(ASD)
 set(CMAKE_CXX_STANDARD 14)
 
 add_executable(ASD sortowania/sortowania.cpp)
+add_executable(zajecia1 zadania_rozne/zajecia1.cpp)
