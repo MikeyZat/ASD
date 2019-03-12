@@ -45,11 +45,11 @@ void zadanie2() {
     }
 }
 
-void quickSort(przedzial *tab, int lewy, int prawy) {
-    if (prawy <= lewy) return;
+void quickSort(przedzial *tab, int left, int right) {
+    if (right <= left) return;
 
-    int i = lewy - 1, j = prawy + 1,
-            pivot = tab[(lewy + prawy) / 2].a; //wybieramy punkt odniesienia
+    int i = left - 1, j = right + 1,
+            pivot = tab[(left + right) / 2].a; //wybieramy punkt odniesienia
 
     while (true) {
         //szukam elementu wiekszego lub rownego piwot stojacego
@@ -69,14 +69,14 @@ void quickSort(przedzial *tab, int lewy, int prawy) {
             break;
     }
 
-    if (j > lewy)
-        quickSort(tab, lewy, j);
-    if (i < prawy)
-        quickSort(tab, i, prawy);
+    if (j > left)
+        quickSort(tab, left, j);
+    if (i < right)
+        quickSort(tab, i, right);
 }
 
 int find_interval(przedzial *tab, const int N) {
-    quickSort(tab,0,N-1);
+    quickSort(tab, 0, N - 1);
     int max = 0;
     int max_index = -1;
     for (int i = 0; i < N; i++) {
@@ -122,11 +122,74 @@ void zadanie4() {
     tab[3].worth = true;
     tab[4].worth = true;
     tab[5].worth = true;
-    int przedzial = find_interval(tab, 6);
-    cout << tab[przedzial].a << " " << tab[przedzial].b;
+    int interval = find_interval(tab, 6);
+    cout << tab[interval].a << " " << tab[interval].b;
+}
+
+struct point {
+    int x;
+    int y;
+};
+
+struct container {
+    point a;
+    point b;
+};
+
+int howManyContainers(container *tab, const int n, int a) {
+    int max = tab[0].a.y;
+    int min = tab[0].b.y;
+    for (int i = 1; i < n; i++) {
+        if (tab[i].a.y > max)max = tab[i].a.y;
+        if (tab[i].b.y < min)min = tab[i].b.y;                  //finding min level and max level
+    }
+    int hash = min;
+    int size = max - hash + 1;                                  //translating levels to indexes
+    int *water = new int[size];
+    int *filled_containers = new int[size];
+    for (int i = 0; i < size; i++)filled_containers[i] = water[i] = 0;
+
+    for (int i = 0; i < n; i++) {
+        water[tab[i].b.y - hash] += tab[i].b.x - tab[i].a.x;            //adding a width of container to each level
+        water[tab[i].a.y - hash] += tab[i].a.x - tab[i].b.x;
+        filled_containers[tab[i].a.y - hash - 1] += 1; // I dont really know why -1 in index but it works XD
+    }
+    for (int i = 1; i < size; i++)
+        water[i] += water[i - 1];             //prefix sum (after that 'water'
+    // of each index contains right amount of water on each level
+
+    for (int i = 1; i < size; i++) {
+        water[i] += water[i - 1];   //after this each index contains an amount of water 'under' that level
+        filled_containers[i] += filled_containers[i - 1];  //answers our exercise question
+    }
+
+    int i = 1;
+    while (i < size && a >= water[i])   //should have used binary search here
+        i++;
+
+    int result = filled_containers[i - 1];
+    delete[] water;              //cleaning memory
+    delete[] filled_containers;
+    return result;
+};
+
+void zadanie3() {
+    int n;
+    cout << "podaj n" << endl;
+    cin >> n;
+    container tab[10];
+    cout << "podaj współrzędne zbiorników" << endl;
+    for (int i = 0; i < n; i++) {
+        cin >> tab[i].a.x >> tab[i].a.y >> tab[i].b.x >> tab[i].b.y;
+    }
+    int a;
+    cout << "podaj a" << endl;
+    cin >> a;
+    cout << howManyContainers(tab, n, a);
 }
 
 int main() {
 //    zadanie2();
+    zadanie3();
 //    zadanie4();
 }
