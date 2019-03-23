@@ -388,6 +388,68 @@ void zad1Kolos2014() {
     }
 }
 
+bool klusek(int *tab, int n, int k) {
+    int max = 0;
+    for (int i = 0; i < n; i++) {
+        if (max < tab[i]) max = tab[i];
+    }
+    int *values = new int[max];
+    for (int i = 0; i < n; i++)
+        values[tab[i]] = 0;
+
+    int repeating = 0;
+    int min = max;
+    max = 0;
+    for (int i = 0; i < k; i++) {           //tworzymy sobie naszą gąsięnicę o długości k
+        if (values[tab[i]] > 0)      //tutaj sprawdzamy czy liczba już się powtórzyła
+            repeating++;
+
+        values[tab[i]]++;
+
+        if (tab[i] > max) max = tab[i];             //potrzebne nam będą min i max w podciągiem
+        if (tab[i] < min) min = tab[i];
+    }
+
+    for (int i = k; i < n; i++) {
+        if ((max - min) == (k - 1) && repeating ==
+                                      0)             //jeśli repeating==0 to znaczy że każda liczba w podciągu występuje dokładnie raz
+            return true;
+
+        if (values[tab[i - k]] > 1)
+            repeating--;                 //jeśli if jest spełniony to znaczy że wcześniej liczby się powtarzały
+        values[tab[i - k]]--;
+        if (values[tab[i]] > 0)
+            repeating++;                   //jeśli if jest spełniony to znaczy że po dodaniu tej liczby któreś liczby się powtarzają
+        values[tab[i]]++;
+
+        //tu jeszcze powinno być aktualizowanie minimum i maksimum ale do tego w sumie chyba potrzeba kopca
+    }
+    return ((max - min) == (k - 1) && repeating == 0);
+}
+
+bool possible(string u, string v, string w) {
+    int *characters = new int[26];
+    for (int i = 0; i < 26; i++) characters[i] = 0;
+
+    int counter = 0;
+
+    for (int i = 0; i < w.size(); i++) {
+        if (characters[digitFromChar(w[i])] == 0)counter++;
+        characters[digitFromChar(w[i])]++;
+    }
+    for (int i = 0; i < v.size(); i++) {
+        characters[digitFromChar(v[i])]--;
+        if (characters[digitFromChar(v[i])] == 0)counter--;
+    }
+    for (int i = 0; i < u.size(); i++) {
+        characters[digitFromChar(u[i])]--;
+        if (characters[digitFromChar(u[i])] == 0)counter--;
+    }
+
+    delete [] characters;
+    return counter == 0;
+}
+
 
 int main() {
 
