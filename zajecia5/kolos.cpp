@@ -126,7 +126,7 @@ int initializeSub(int *t, int k) {
     return sub;
 }
 
-void prepareSubstrings(int *substrings,int *t, int k, int n, int sub) {
+void prepareSubstrings(int *substrings, int *t, int k, int n, int sub) {
     for (int i = k; i < n; i++) {
         substrings[sub] = 0;
         sub <<= 1;
@@ -136,19 +136,19 @@ void prepareSubstrings(int *substrings,int *t, int k, int n, int sub) {
     substrings[sub] = 0;
 }
 
-int findMax(int *substrings,int *t, int k, int n, int sub){
-    int max=substrings[sub];
+int findMax(int *substrings, int *t, int k, int n, int sub) {
+    int max = substrings[sub];
     for (int i = k; i < n; i++) {
         substrings[sub]++;
-        if(substrings[sub]>substrings[max])
-            max=sub;
+        if (substrings[sub] > substrings[max])
+            max = sub;
         sub <<= 1;
         sub += t[i];
         sub &= 7;
     }
     substrings[sub]++;
-    if(substrings[sub]>substrings[max])
-        max=sub;
+    if (substrings[sub] > substrings[max])
+        max = sub;
     return max;
 }
 
@@ -160,9 +160,9 @@ string majorSubstring(string sentence, int k) {
         tab[i] = digit(sentence[i]);
     }
     int sub = initializeSub(tab, k);
-    prepareSubstrings(substrings, tab,  k, n, sub);
-    int max = findMax(substrings, tab,  k, n, sub);
-    cout<<max;
+    prepareSubstrings(substrings, tab, k, n, sub);
+    int max = findMax(substrings, tab, k, n, sub);
+    cout << max;
     return " ";
 }
 
@@ -173,8 +173,223 @@ void zad3Kolos2016() {
         cout << res[i];
 }
 
+struct help {
+    int sum;
+    int index;
+};
+
+
+int sumPartition(help t[], int left, int right) {
+    int x = t[right].sum;
+
+    int j = left;
+
+    for (int i = left; i < right; i++) {
+        if (t[i].sum < x) {
+            help tmp = t[i];
+            t[i] = t[j];
+            t[j] = tmp;
+            j++;
+        }
+    }
+    help tmp = t[right];
+    t[right] = t[j];
+    t[j] = tmp;
+    return j;
+}
+
+
+void quickSumSort(help t[], int left, int right) {
+    if (left < right) {
+
+        int q = sumPartition(t, left, right);
+
+        quickSumSort(t, left, q - 1);
+        quickSumSort(t, q + 1, right);
+    }
+}
+
+void SumSort(int *A, int *B, int n) {
+    help *sumTab = new help[n];
+    for (int i = 0; i < n; i++) {
+        sumTab[i].index = i;
+        sumTab[i].sum = 0;
+        for (int j = 0; j < n; j++) {
+            sumTab[i].sum += A[i * n + j];
+        }
+    }
+
+    quickSumSort(sumTab, 0, n - 1);
+
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < n; j++) {
+            B[i * n + j] = A[sumTab[i].index * n + j];
+        }
+    }
+    delete[] sumTab;
+
+}
+
+
+void zad1Kolos2015() {
+    int A[16];
+    for (int i = 0; i < 16; i++) {
+        A[i] = ((i + 3) * 13) % 31;
+        cout << A[i] << " ";
+    }
+    cout << endl;
+    int B[16] = {0};
+    SumSort(A, B, 4);
+
+    for (int i = 0; i < 16; i++) {
+        cout << B[i] << " ";
+    }
+}
+
+int partition(int *t, int left, int right) {
+    int x = t[right];
+    int j = left;
+    for (int i = left; i < right; i++) {
+        if (t[i] < x) {
+            int tmp = t[i];
+            t[i] = t[j];
+            t[j] = tmp;
+            j++;
+        }
+    }
+    int tmp = t[right];
+    t[right] = t[j];
+    t[j] = tmp;
+    return j;
+}
+
+void quicksort(int *t, int left, int right) {
+    if (left < right) {
+
+        int q = partition(t, left, right);
+        quicksort(t, left, q - 1);
+        quicksort(t, q + 1, right);
+    }
+}
+
+void merge(int *A, int *B, int n, int k) {
+    int *tmp = new int[n];
+    int l = 0;
+    int i = 0;
+    int j = 0;
+    while (i < n && j < k) {
+        if (A[i] % 2 == 0) {
+            i++;
+        } else {
+
+            if (A[i] < B[j])
+                tmp[l++] = A[i++];
+            else
+                tmp[l++] = B[j++];
+        }
+    }
+    while (i < n) {
+        if (A[i] % 2 == 0) {
+            i++;
+        } else
+            tmp[l++] = A[i++];
+    }
+
+    while (j < k)
+        tmp[l++] = B[j++];
+
+    for (int i = 0; i < n; i++) {
+        A[i] = tmp[i];
+    }
+
+    delete[] tmp;
+}
+
+void sortEven(int *tab, int n) {
+    int *even = new int[3];
+    int j = 0;
+    for (int i = 0; i < n; i++) {
+        if (tab[i] % 2 == 0)
+            even[j++] = tab[i];
+    }
+
+    cout << even[0] << " " << even[1] << " " << even[2] << endl;
+
+    quicksort(even, 0, 2);
+
+    cout << even[0] << " " << even[1] << " " << even[2] << endl;
+
+    merge(tab, even, n, 3);
+
+    delete[] even;
+}
+
+
+void zad2Kolos2015() {
+    int A[8] = {1, 5, 4, 7, 11, 13, 2, 6};
+    sortEven(A, 8);
+
+    for (int i = 0; i < 8; i++) {
+        cout << A[i] << " ";
+    }
+}
+
+int digitFromChar(char a) {
+    return (int) (a - 'a');
+}
+
+void countingSort(string A[], int start, int n, int pos) {
+    string *results = new string[n];
+    int *counters = new int[26];
+    for (int i = 0; i < 26; i++)counters[i] = 0;
+    for (int i = start; i < n; i++) {
+        counters[digitFromChar(A[i][pos])]++;
+    }
+    for (int i = 1; i < 26; i++) {
+        counters[i] += counters[i - 1];
+    }
+
+    for (int i = n - 1; i >= start; i--) {
+        counters[digitFromChar(A[i][pos])]--;
+        results[start + counters[digitFromChar(A[i][pos])]] = A[i];
+    }
+
+    for (int i = start; i < n; i++) A[i] = results[i];
+
+    delete[] results;
+    delete[] counters;
+
+}
+
+void sortStrings(string A[], int n) {
+    int *sizes = new int[n];
+    for (int i = 0; i < n; i++)
+        sizes[i] = A[i].size();
+
+    //quicksort(A,sizes,0,n-1);
+
+    int max = sizes[n - 1] - 1;
+    int start = n - 1;
+    for (int i = max; i >= 0; i--) {
+        while (sizes[start] - 1 >= i)
+            start--;
+        countingSort(A, start + 1, n, i);
+    }
+    delete[] sizes;
+}
+
+void zad1Kolos2014() {
+    string A[8] = {"ac", "aca", "abc", "jds", "abcd", "jsad", "adsads", "ojdsoah"};
+    sortStrings(A, 8);
+    for (int i = 0; i < 8; i++) {
+        for (int j = 0; j < A[i].size(); j++)
+            cout << A[i][j];
+        cout << endl;
+    }
+}
+
+
 int main() {
 
-    zad3Kolos2016();
     return 0;
 }
