@@ -248,7 +248,7 @@ void zad1Kolos2015() {
 
 int partition(int *t, int left, int right) {
     int x = t[right];
-    int j = left;
+    int j = left ;
     for (int i = left; i < right; i++) {
         if (t[i] < x) {
             int tmp = t[i];
@@ -358,7 +358,6 @@ void countingSort(string A[], int start, int n, int pos) {
 
     delete[] results;
     delete[] counters;
-
 }
 
 void sortStrings(string A[], int n) {
@@ -446,12 +445,15 @@ bool possible(string u, string v, string w) {
         if (characters[digitFromChar(u[i])] == 0)counter--;
     }
 
-    delete [] characters;
+    delete[] characters;
     return counter == 0;
 }
 
 
 int main() {
-
+    int tab[10] = {32, 12, 412, 5, 5321, 4, 21, 4, 5, 13};
+    quicksort(tab, 0, 9);
+    for (int i = 0; i < 10; i++)
+        cout << tab[i] << " ";
     return 0;
 }
