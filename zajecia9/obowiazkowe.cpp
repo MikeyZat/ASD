@@ -22,6 +22,48 @@ int possibleFields(bool A[N][N], int x, int y) {
     return a + b + c + d + 1;
 };
 
+void tesdPI() {
+    const int N = 3;
+    bool tab[N][N];
+    int results[N][N];
+    for (int i = 0; i < N; i++) {
+        for (int j = 0; j < N; j++) {
+            cin >> tab[i][j];
+            results[i][j] = 0;
+        }
+    }
+
+    int start_x, start_y, end_x, end_y;
+    cin >> start_x >> start_y >> end_x >> end_y;
+    if (tab[start_x][start_y]) {
+        results[start_x][start_y] = 1;
+    } else {
+        cout << 0;
+        return;
+    }
+    for (int i = start_x + 1; i < N; i++) {
+        if (tab[start_y][i])
+            results[start_y][i] = 1;
+        else break;
+    }
+    for (int j = start_y + 1; j < N; j++) {
+        if (tab[j][start_x])
+            results[j][start_x] = 1;
+        else break;
+    }
+    for (int i = start_x + 1; i < N; i++) {
+        for (int j = start_y + 1; j < N; j++) {
+            if(tab[i][j]){
+                results[i][j]=results[i-1][j-1] + results[i-1][j] + results[i][j-1];
+            }else{
+                results[i][j]=0;
+            }
+        }
+    }
+
+    cout<<results[N-1][N-1];
+}
+
 void zad1() {
     bool A[N][N] = {{false, true, false, true,  true},
                     {true,  true, true,  false, false},
@@ -33,5 +75,6 @@ void zad1() {
 
 
 int main() {
-    zad1();
+//    zad1();
+    tesdPI();
 }
